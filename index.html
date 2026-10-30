@@ -16,6 +16,10 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+  <!-- 現在地から目的地までのルート案内 -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css">
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -318,6 +322,11 @@
           <p>
             赤いマーカーは現在地、青いマーカーはスポットです。
           </p>
+
+          <p>
+            青いマーカーをタップすると、
+            現在地から選択した場所までのルートを表示します。
+          </p>
         </div>
 
         <button id="locationButton">
@@ -492,6 +501,8 @@
 
     let map = null;
     let userMarker = null;
+    let currentLocation = null;
+    let routeControl = null;
 
 
     // ==================================================
@@ -1412,13 +1423,33 @@
 
             '</div>';
 
-          L.marker(
-            [spot.lat, spot.lng]
+          const spotMarker = L.marker(
+            [spot.lat, spot.lng],
+            {
+              // 富樫氏ゆかりの場所は青色のマーカー
+              icon: new L.Icon.Default()
+            }
           )
 
           .addTo(map)
 
-          .bindPopup(popupContent);
+          .bindPopup(
+            popupContent +
+            '<p style="margin:8px 0 0; color:#1769aa; font-weight:bold;">' +
+            '現在地からのルートを表示します。' +
+            '</p>'
+          );
+
+          // スポットをタップしたら現在地からのルートを表示
+          spotMarker.on('click', function() {
+
+            if (currentLocation) {
+              drawRouteToSpot(spot);
+            } else {
+              getUserLocation(spot);
+            }
+
+          });
 
         }
       );
@@ -1453,10 +1484,119 @@
 
 
     // ==================================================
+    // 現在地から選択したスポットまでのルート案内
+    // ==================================================
+
+    function drawRouteToSpot(spot) {
+
+      const message =
+        document.getElementById(
+          'locationMessage'
+        );
+
+      if (!currentLocation) {
+        message.textContent =
+          '現在地を取得できていません。位置情報を許可してください。';
+        return;
+      }
+
+      if (
+        typeof L.Routing === 'undefined' ||
+        !L.Routing.control
+      ) {
+        message.textContent =
+          'ルート案内機能を読み込めません。インターネット接続を確認してください。';
+        return;
+      }
+
+      // 前に表示したルートを削除
+      if (routeControl) {
+        map.removeControl(routeControl);
+        routeControl = null;
+      }
+
+      message.textContent =
+        spot.name + ' までのルートを検索しています...';
+
+      // 現在地から目的地までのルートを作成
+      routeControl = L.Routing.control({
+
+        waypoints: [
+          L.latLng(
+            currentLocation.lat,
+            currentLocation.lng
+          ),
+          L.latLng(
+            spot.lat,
+            spot.lng
+          )
+        ],
+
+        // ルート案内用の追加マーカーは表示しない
+        createMarker: function() {
+          return null;
+        },
+
+        // 案内パネルを非表示にして地図上にルートだけ表示
+        show: false,
+        addWaypoints: false,
+        routeWhileDragging: false,
+        fitSelectedRoutes: true,
+
+        // ルートの線を紫色にする
+        lineOptions: {
+          styles: [
+            {
+              color: '#8e44ad',
+              opacity: 0.85,
+              weight: 6
+            }
+          ]
+        },
+
+        router: L.Routing.osrmv1({
+          serviceUrl: 'https://router.project-osrm.org/route/v1'
+        })
+
+      }).addTo(map);
+
+      // ルート検索に成功した場合
+      routeControl.on('routesfound', function(event) {
+
+        const route = event.routes[0];
+
+        const distanceKm =
+          (route.summary.totalDistance / 1000).toFixed(2);
+
+        const timeMinutes =
+          Math.round(route.summary.totalTime / 60);
+
+        message.textContent =
+          spot.name +
+          ' までのルートを表示しました。距離：約' +
+          distanceKm +
+          ' km、所要時間：約' +
+          timeMinutes +
+          ' 分（目安）';
+
+      });
+
+      // ルート検索に失敗した場合
+      routeControl.on('routingerror', function() {
+
+        message.textContent =
+          'ルートを検索できませんでした。通信状態や場所を確認してください。';
+
+      });
+
+    }
+
+
+    // ==================================================
     // 現在地取得
     // ==================================================
 
-    function getUserLocation() {
+    function getUserLocation(targetSpot = null) {
 
       const message =
         document.getElementById(
@@ -1483,6 +1623,12 @@
 
           const lng =
             position.coords.longitude;
+
+          // 取得した現在地を保存
+          currentLocation = {
+            lat: lat,
+            lng: lng
+          };
 
           message.textContent =
             '現在地を取得しました。';
@@ -1529,6 +1675,11 @@
             [lat, lng],
             15
           );
+
+          // スポットを選択していた場合はルートを表示
+          if (targetSpot) {
+            drawRouteToSpot(targetSpot);
+          }
 
         },
 
