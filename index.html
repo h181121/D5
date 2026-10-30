@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -392,25 +393,21 @@
           景品と交換できます。
         </p>
 
+        <!-- 商品券 -->
         <div class="reward">
           <h3>🎫 協力店で使用できる商品券</h3>
           <p>必要ポイント：20 pt</p>
+
           <button id="reward20Button">
             20ポイントで交換
           </button>
         </div>
 
+        <!-- オリジナルグッズ -->
         <div class="reward">
-          <h3>🔑 オリジナルキーホルダー</h3>
-          <p>必要ポイント：15 pt</p>
-          <button id="reward15Button">
-            15ポイントで交換
-          </button>
-        </div>
-
-        <div class="reward">
-          <h3>⭐ オリジナルステッカー</h3>
+          <h3>🎁 オリジナルグッズ</h3>
           <p>必要ポイント：10 pt</p>
+
           <button id="reward10Button">
             10ポイントで交換
           </button>
@@ -1270,27 +1267,13 @@
     );
 
     document.getElementById(
-      'reward15Button'
-    ).addEventListener(
-      'click',
-      function() {
-
-        exchangeReward(
-          'オリジナルキーホルダー',
-          15
-        );
-
-      }
-    );
-
-    document.getElementById(
       'reward10Button'
     ).addEventListener(
       'click',
       function() {
 
         exchangeReward(
-          'オリジナルステッカー',
+          'オリジナルグッズ',
           10
         );
 
@@ -1782,4 +1765,5 @@
   </script>
 
 </body>
+
 </html>
