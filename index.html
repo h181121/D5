@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -203,6 +202,552 @@
     .reset-button:hover {
       background: #c0392b;
     }
+
+    /* ==================================================
+       参考アプリに合わせた外観
+       ※HTMLのID・JavaScriptの処理は変更していません
+       ================================================== */
+
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --success: #10b981;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #0f172a;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 12px rgb(15 23 42 / 0.06);
+      --shadow-lg: 0 12px 28px rgb(15 23 42 / 0.09);
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Inter", "Noto Sans JP", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 8% 8%, #dbeafe 0, transparent 28%),
+        var(--bg);
+      color: var(--text-main);
+      text-align: left;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: max(env(safe-area-inset-top), 14px) 18px 14px;
+      color: var(--text-main);
+      text-align: center;
+      background: rgb(255 255 255 / 88%);
+      border-bottom: 1px solid rgb(226 232 240 / 85%);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    header h1 {
+      font-size: 1.08rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    main {
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 20px 16px calc(100px + env(safe-area-inset-bottom));
+    }
+
+    .screen {
+      display: none;
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    .screen.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+      animation: screenAppear 0.24s ease-out;
+    }
+
+    @keyframes screenAppear {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      width: 100%;
+      max-width: none;
+      margin: 0 auto 16px;
+      padding: 25px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      color: var(--text-main);
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .card h3 {
+      color: var(--text-main);
+      font-weight: 750;
+    }
+
+    .card p {
+      color: var(--text-sub);
+      line-height: 1.75;
+      font-size: 0.92rem;
+    }
+
+    button {
+      min-height: 46px;
+      margin: 6px 0;
+      padding: 12px 16px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      background: var(--primary);
+      color: white;
+      font-size: 0.92rem;
+      font-weight: 700;
+      box-shadow: 0 3px 8px rgb(37 99 235 / 0.16);
+      transition: background 0.18s ease, transform 0.18s ease,
+        box-shadow 0.18s ease;
+      touch-action: manipulation;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 5px 12px rgb(37 99 235 / 0.2);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      background: #cbd5e1;
+      color: #64748b;
+      border-color: #cbd5e1;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    #homeScanButton,
+    #pointsScanButton,
+    #reward20Button,
+    #reward10Button {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+    }
+
+    #homeMapButton,
+    #homePointsButton,
+    #homeRewardsButton,
+    #pointsRewardButton,
+    #togashiSiteButton,
+    #locationButton,
+    #backCameraBtn,
+    #frontCameraBtn {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-color: #bfdbfe;
+      box-shadow: none;
+    }
+
+    #homeMapButton:hover,
+    #homePointsButton:hover,
+    #homeRewardsButton:hover,
+    #pointsRewardButton:hover,
+    #togashiSiteButton:hover,
+    #locationButton:hover,
+    #backCameraBtn:hover,
+    #frontCameraBtn:hover {
+      background: #dbeafe;
+    }
+
+    #resetButton,
+    .reset-button {
+      width: 100%;
+      margin-top: 16px;
+      background: #fff1f2;
+      color: #be123c;
+      border: 1px solid #fecdd3;
+      box-shadow: none;
+    }
+
+    #resetButton:hover,
+    .reset-button:hover {
+      background: #ffe4e6;
+    }
+
+    .points {
+      display: inline-block;
+      min-width: 150px;
+      margin: 4px auto 16px;
+      padding: 14px 24px;
+      color: var(--primary);
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 1px solid #bfdbfe;
+      border-radius: 18px;
+      font-size: 2.35rem;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+    }
+
+    #home .card > p:first-of-type {
+      margin-bottom: 18px;
+    }
+
+    #home .card > button {
+      width: 100%;
+      display: block;
+    }
+
+    #home .points {
+      display: block;
+      width: 100%;
+      margin: 8px 0 20px;
+      padding: 20px;
+      text-align: center;
+      font-size: 2.7rem;
+    }
+
+    #home .points::before {
+      content: "CURRENT POINTS";
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text-sub);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+    }
+
+    #scan .card > div:first-of-type {
+      display: flex;
+      gap: 8px;
+    }
+
+    #scan .card > div:first-of-type button {
+      flex: 1;
+    }
+
+    #reader {
+      width: 100%;
+      max-width: 400px;
+      margin: 18px auto;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #f1f5f9;
+    }
+
+    #reader video {
+      border-radius: 14px;
+    }
+
+    #startBtn,
+    #stopBtn {
+      width: calc(50% - 5px);
+    }
+
+    .message {
+      min-height: 28px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: var(--text-main);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    #cameraMessage {
+      text-align: center;
+    }
+
+    #map {
+      height: 500px;
+      margin-top: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+      z-index: 1;
+    }
+
+    .map-info {
+      margin-top: 16px;
+      padding: 16px;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .map-info p {
+      margin: 8px 0;
+      font-size: 0.86rem;
+    }
+
+    .spot-list {
+      margin-top: 18px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .spot-list h3 {
+      margin-top: 0;
+    }
+
+    .spot-list p {
+      margin: 0;
+      padding: 10px 4px;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--text-main);
+      font-size: 0.9rem;
+    }
+
+    .spot-list p:last-child {
+      border-bottom: 0;
+    }
+
+    #points .card,
+    #rewards .card {
+      text-align: center;
+    }
+
+    #points .points,
+    #rewards .points {
+      display: block;
+      width: 100%;
+    }
+
+    #points hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 22px 0;
+    }
+
+    #points button {
+      width: 100%;
+      display: block;
+    }
+
+    .reward {
+      max-width: none;
+      margin: 16px 0;
+      padding: 20px 16px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .reward h3 {
+      margin: 0 0 10px;
+      font-size: 1.02rem;
+    }
+
+    .reward p {
+      margin: 8px 0 14px;
+      color: var(--text-sub);
+      font-weight: 650;
+    }
+
+    .reward button {
+      width: 100%;
+      margin: 0;
+    }
+
+    #exchangeMessage {
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .history {
+      max-width: none;
+      margin: 22px 0 0;
+      padding: 16px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .history h3 {
+      margin-top: 0;
+    }
+
+    .history ul {
+      padding-left: 20px;
+      color: var(--text-sub);
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    nav {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 2000;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+      background: rgb(255 255 255 / 94%);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -6px 20px rgb(15 23 42 / 0.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    nav button {
+      flex: 1;
+      min-width: 0;
+      min-height: 54px;
+      margin: 0 2px;
+      padding: 8px 2px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.72rem;
+      font-weight: 600;
+      box-shadow: none;
+      white-space: nowrap;
+    }
+
+    nav button:hover {
+      background: #f1f5f9;
+      color: var(--primary);
+      box-shadow: none;
+    }
+
+    nav button.selected {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      box-shadow: none;
+    }
+
+    @media (max-width: 380px) {
+      header h1 {
+        font-size: 0.98rem;
+      }
+
+      main {
+        padding-right: 12px;
+        padding-left: 12px;
+      }
+
+      .card {
+        padding: 21px 16px;
+      }
+
+      nav button {
+        font-size: 0.66rem;
+      }
+    }
+
+    /* 下部メニュー：アイコン＋文字の縦並び */
+    nav.bottom-navigation {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-around;
+      gap: 0;
+      padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.97);
+      border-top: 1px solid #e2e8f0;
+      box-shadow: 0 -3px 12px rgba(15, 23, 42, 0.06);
+    }
+
+    nav.bottom-navigation button {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      min-width: 0;
+      min-height: 76px;
+      margin: 0;
+      padding: 8px 2px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.2;
+      box-shadow: none;
+    }
+
+    nav.bottom-navigation button svg {
+      display: block;
+      width: 29px;
+      height: 29px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: 0 0 auto;
+    }
+
+    nav.bottom-navigation button.selected {
+      background: transparent;
+      color: #2563eb;
+      font-weight: 700;
+    }
+
+    nav.bottom-navigation button:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: -3px;
+    }
+
+    @media (max-width: 380px) {
+      nav.bottom-navigation button {
+        font-size: 12px;
+        min-height: 70px;
+      }
+
+      nav.bottom-navigation button svg {
+        width: 26px;
+        height: 26px;
+      }
+    }
   </style>
 </head>
 
@@ -234,27 +779,27 @@
         <br>
 
         <button id="homeScanButton">
-          二次元バーコードを読み取る
+          📷 二次元バーコードを読み取る
         </button>
 
         <button id="homeMapButton">
-          地図を見る
+          🗺️ 地図を見る
         </button>
 
         <button id="homePointsButton">
-          ポイントを確認する
+          ⭐ ポイントを確認する
         </button>
 
         <button id="homeRewardsButton">
-          景品と交換する
+          🎁 景品と交換する
         </button>
 
         <button id="togashiSiteButton">
-          富樫プロジェクトについて
+          🌐 富樫プロジェクトについて
         </button>
 
         <button id="resetButton" class="reset-button">
-          データをリセット
+          🔄 データをリセット
         </button>
       </div>
     </section>
@@ -425,12 +970,45 @@
   </main>
 
   <!-- 下部メニュー -->
-  <nav>
-    <button id="navHome" class="selected">🏠 ホーム</button>
-    <button id="navScan">📷 読み取り</button>
-    <button id="navMap">🗺️ 地図</button>
-    <button id="navPoints">⭐ ポイント</button>
-    <button id="navRewards">🎁 景品</button>
+  <nav class="bottom-navigation">
+    <button id="navHome" class="selected" aria-label="ホーム">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 10.5 12 3l9 7.5v10a.5.5 0 0 1-.5.5h-6v-7h-5v7h-6a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+      <span>ホーム</span>
+    </button>
+
+    <button id="navScan" aria-label="スキャン">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        <path d="M9 9h6v6H9z"/>
+      </svg>
+      <span>スキャン</span>
+    </button>
+
+    <button id="navMap" aria-label="マップ">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+        <circle cx="12" cy="10" r="2.7"/>
+      </svg>
+      <span>マップ</span>
+    </button>
+
+    <button id="navPoints" aria-label="ポイント">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M15.5 8.5h-5a2 2 0 0 0 0 4h3a2 2 0 0 1 0 4h-5M12 6.5v11"/>
+      </svg>
+      <span>ポイント</span>
+    </button>
+
+    <button id="navRewards" aria-label="景品">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 10h18v11H3zM2 7h20v3H2zM12 7v14"/>
+        <path d="M12 7H7.5a2.5 2.5 0 1 1 2.2-3.7C11 5 12 7 12 7Zm0 0h4.5a2.5 2.5 0 1 0-2.2-3.7C13 5 12 7 12 7Z"/>
+      </svg>
+      <span>景品</span>
+    </button>
   </nav>
 
   <script>
