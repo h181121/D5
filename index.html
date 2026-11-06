@@ -1,208 +1,187 @@
+**第2部分（デザインの続き・各画面のHTML・下部メニュー）**
 
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="富樫デジタルスタンプラリー">
-  <meta name="theme-color" content="#3498db">
-
-  <title>富樫デジタルスタンプラリー</title>
-
-  <!-- 二次元バーコード読み取り -->
-  <script src="https://unpkg.com/html5-qrcode"></script>
-
-  <!-- Leaflet 地図 -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- 現在地から目的地までのルート案内 -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css">
-  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
+```html
+    #points hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 22px 0;
     }
 
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: #f5f5f5;
-      text-align: center;
-    }
-
-    /* ヘッダー */
-    header {
-      background: #3498db;
-      color: white;
-      padding: 15px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-
-    /* メイン */
-    main {
-      padding: 20px 15px 100px;
-    }
-
-    /* 画面切り替え */
-    .screen {
-      display: none;
-    }
-
-    .screen.active {
+    #points button {
+      width: 100%;
       display: block;
     }
 
-    /* カード */
-    .card {
-      max-width: 600px;
-      margin: 15px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 12px;
+    .reward {
+      max-width: none;
+      margin: 16px 0;
+      padding: 20px 16px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
     }
 
-    /* ボタン */
-    button {
-      padding: 12px 16px;
-      margin: 6px;
-      border: none;
-      border-radius: 8px;
-      background: #3498db;
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
-      touch-action: manipulation;
+    .reward h3 {
+      margin: 0 0 10px;
+      font-size: 1.02rem;
     }
 
-    button:hover {
-      background: #217dbb;
+    .reward p {
+      margin: 8px 0 14px;
+      color: var(--text-sub);
+      font-weight: 650;
     }
 
-    button:disabled {
-      background: #aaa;
-      cursor: not-allowed;
+    .reward button {
+      width: 100%;
+      margin: 0;
     }
 
-    /* 下部メニュー */
+    #exchangeMessage {
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .history {
+      max-width: none;
+      margin: 22px 0 0;
+      padding: 16px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .history h3 {
+      margin-top: 0;
+    }
+
+    .history ul {
+      padding-left: 20px;
+      color: var(--text-sub);
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
     nav {
       position: fixed;
+      right: 0;
       bottom: 0;
       left: 0;
-      width: 100%;
-      display: flex;
-      background: white;
-      border-top: 1px solid #ccc;
       z-index: 2000;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+      background: rgb(255 255 255 / 94%);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -6px 20px rgb(15 23 42 / 0.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
     nav button {
       flex: 1;
-      margin: 0;
-      padding: 15px 4px;
-      border-radius: 0;
-      background: white;
-      color: #333;
-      font-size: 13px;
+      min-width: 0;
+      min-height: 54px;
+      margin: 0 2px;
+      padding: 8px 2px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.72rem;
+      font-weight: 600;
+      box-shadow: none;
+      white-space: nowrap;
+    }
+
+    nav button:hover {
+      background: #f1f5f9;
+      color: var(--primary);
+      box-shadow: none;
     }
 
     nav button.selected {
-      background: #dceeff;
-      color: #1769aa;
-      font-weight: bold;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      box-shadow: none;
     }
 
-    /* 二次元バーコード */
-    #reader {
-      width: 100%;
-      max-width: 400px;
-      margin: 15px auto;
+    @media (max-width: 380px) {
+      header h1 { font-size: 0.98rem; }
+      main { padding-right: 12px; padding-left: 12px; }
+      .card { padding: 21px 16px; }
+      nav button { font-size: 0.66rem; }
     }
 
-    /* メッセージ */
-    .message {
-      min-height: 24px;
-      overflow-wrap: anywhere;
-      font-weight: bold;
+    /* 下部メニュー：アイコン＋文字の縦並び */
+    nav.bottom-navigation {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-around;
+      gap: 0;
+      padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.97);
+      border-top: 1px solid #e2e8f0;
+      box-shadow: 0 -3px 12px rgba(15, 23, 42, 0.06);
     }
 
-    /* ポイント */
-    .points {
-      color: #159b65;
-      font-size: 30px;
-      font-weight: bold;
+    nav.bottom-navigation button {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      min-width: 0;
+      min-height: 76px;
+      margin: 0;
+      padding: 8px 2px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.2;
+      box-shadow: none;
     }
 
-    /* 景品 */
-    .reward {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 15px auto;
-      max-width: 350px;
-      background: #fafafa;
+    nav.bottom-navigation button svg {
+      display: block;
+      width: 29px;
+      height: 29px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: 0 0 auto;
     }
 
-    .reward h3 {
-      margin-top: 5px;
+    nav.bottom-navigation button.selected {
+      background: transparent;
+      color: #2563eb;
+      font-weight: 700;
     }
 
-    .reward p {
-      margin: 8px;
+    nav.bottom-navigation button:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: -3px;
     }
 
-    .reward button {
-      width: 80%;
+    @media (max-width: 380px) {
+      nav.bottom-navigation button {
+        font-size: 12px;
+        min-height: 70px;
+      }
+      nav.bottom-navigation button svg {
+        width: 26px;
+        height: 26px;
+      }
     }
 
-    /* 交換履歴 */
-    .history {
-      text-align: left;
-      max-width: 400px;
-      margin: 20px auto;
-    }
-
-    /* 地図 */
-    #map {
-      width: 100%;
-      height: 500px;
-      margin-top: 15px;
-      border-radius: 10px;
-    }
-
-    .map-info {
-      text-align: left;
-      margin-top: 15px;
-      padding: 10px;
-      background: #f8f8f8;
-      border-radius: 8px;
-    }
-
-    /* スポット一覧 */
-    .spot-list {
-      text-align: left;
-      margin-top: 15px;
-    }
-
-    .spot-list p {
-      margin: 8px 0;
-    }
-
-    /* リセット */
-    .reset-button {
-      background: #e74c3c;
-      margin-top: 20px;
-    }
-
-    .reset-button:hover {
-      background: #c0392b;
-    }
   </style>
 </head>
 
@@ -425,17 +404,31 @@
   </main>
 
   <!-- 下部メニュー -->
-  <nav>
-    <button id="navHome" class="selected">🏠 ホーム</button>
-    <button id="navScan">📷 読み取り</button>
-    <button id="navMap">🗺️ 地図</button>
-    <button id="navPoints">⭐ ポイント</button>
-    <button id="navRewards">🎁 景品</button>
+  <nav class="bottom-navigation">
+    <button id="navHome" class="selected" aria-label="ホーム">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5v10a.5.5 0 0 1-.5.5h-6v-7h-5v7h-6a.5.5 0 0 1-.5-.5z"/></svg>
+      <span>ホーム</span>
+    </button>
+    <button id="navScan" aria-label="スキャン">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/><path d="M9 9h6v6H9z"/></svg>
+      <span>スキャン</span>
+    </button>
+    <button id="navMap" aria-label="マップ">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.7"/></svg>
+      <span>マップ</span>
+    </button>
+    <button id="navPoints" aria-label="ポイント">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5h-5a2 2 0 0 0 0 4h3a2 2 0 0 1 0 4h-5M12 6.5v11"/></svg>
+      <span>ポイント</span>
+    </button>
+    <button id="navRewards" aria-label="景品">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18v11H3zM2 7h20v3H2zM12 7v14"/><path d="M12 7H7.5a2.5 2.5 0 1 1 2.2-3.7C11 5 12 7 12 7Zm0 0h4.5a2.5 2.5 0 1 0-2.2-3.7C13 5 12 7 12 7Z"/></svg>
+      <span>景品</span>
+    </button>
   </nav>
 
   <script>
-
-    // ==================================================
+      // ==================================================
     // ポイント
     // ==================================================
 
@@ -1107,7 +1100,6 @@
       }
 
       scanProcessing = true;
-
       const code =
         decodedText.trim();
 
